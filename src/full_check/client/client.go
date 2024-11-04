@@ -1,19 +1,20 @@
 package client
 
 import (
+	"errors"
 	"fmt"
 	"io"
 	"net"
 	"strconv"
 	"strings"
 	"time"
-	"errors"
 
 	"full_check/common"
 
+	"reflect"
+
 	"github.com/gomodule/redigo/redis"
 	redigoCluster "github.com/najoast/redis-go-cluster"
-	"reflect"
 )
 
 var (
@@ -179,7 +180,7 @@ type combine struct {
 }
 
 func (c combine) String() string {
-	all := make([]string, 0, len(c.params) + 1)
+	all := make([]string, 0, len(c.params)+1)
 	all = append(all, c.command)
 	for _, ele := range c.params {
 		all = append(all, string(ele.([]byte)))
@@ -270,10 +271,10 @@ func (p *RedisClient) PipeTypeCommand(keyInfo []*common.Key) ([]string, error) {
 			if v, ok := ele.(string); ok {
 				result[i] = v
 			} else {
-				err := fmt.Errorf("run PipeRawCommand with commands[%s] return element[%v] isn't type string[%v]",
+				result[i] = ""
+				err := fmt.Errorf("run PipeRawCommand with commands[%s] return element[%v] isn't type string[%v], continuing",
 					printCombinList(commands), ele, reflect.TypeOf(ele))
-				common.Logger.Error(err)
-				return nil, err
+				common.Logger.Warn(err)
 			}
 		}
 	}
@@ -299,9 +300,10 @@ func (p *RedisClient) PipeExistsCommand(keyInfo []*common.Key) ([]int64, error) 
 			if v, ok := ele.(int64); ok {
 				result[i] = v
 			} else {
-				err := fmt.Errorf("run PipeRawCommand with commands[%s] return element[%v] isn't type int64[%v]",
+				result[i] = 0
+				err := fmt.Errorf("run PipeRawCommand with commands[%s] return element[%v] isn't type int64[%v], continuing",
 					printCombinList(commands), ele, reflect.TypeOf(ele))
-				common.Logger.Error(err)
+				common.Logger.Warn(err)
 				return nil, err
 			}
 		}
@@ -328,10 +330,10 @@ func (p *RedisClient) PipeLenCommand(keyInfo []*common.Key) ([]int64, error) {
 			if v, ok := ele.(int64); ok {
 				result[i] = v
 			} else {
-				err := fmt.Errorf("run PipeRawCommand with commands[%s] return element[%v] isn't type int64[%v]",
+				result[i] = 0
+				err := fmt.Errorf("run PipeRawCommand with commands[%s] return element[%v] isn't type int64[%v], continuing",
 					printCombinList(commands), ele, reflect.TypeOf(ele))
-				common.Logger.Error(err)
-				return nil, err
+				common.Logger.Warn(err)
 			}
 		}
 	}
@@ -357,10 +359,10 @@ func (p *RedisClient) PipeTTLCommand(keyInfo []*common.Key) ([]bool, error) {
 			if v, ok := ele.(int64); ok {
 				result[i] = v == 0
 			} else {
-				err := fmt.Errorf("run PipeRawCommand with commands[%s] return element[%v] isn't type int64[%v]",
+				result[i] = false
+				err := fmt.Errorf("run PipeRawCommand with commands[%s] return element[%v] isn't type int64[%v], continuing",
 					printCombinList(commands), ele, reflect.TypeOf(ele))
-				common.Logger.Error(err)
-				return nil, err
+				common.Logger.Warn(err)
 			}
 		}
 	}
