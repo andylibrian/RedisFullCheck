@@ -304,7 +304,6 @@ func (p *RedisClient) PipeExistsCommand(keyInfo []*common.Key) ([]int64, error) 
 				err := fmt.Errorf("run PipeRawCommand with commands[%s] return element[%v] isn't type int64[%v], continuing",
 					printCombinList(commands), ele, reflect.TypeOf(ele))
 				common.Logger.Warn(err)
-				return nil, err
 			}
 		}
 	}
