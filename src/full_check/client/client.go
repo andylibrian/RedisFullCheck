@@ -276,7 +276,7 @@ func (p *RedisClient) PipeTypeCommand(keyInfo []*common.Key) ([]string, error) {
 				key := keyInfo[i]
 				err := fmt.Errorf("run PipeRawCommand with commands[%s] return element[%v] isn't type string[%v], key[%s] continuing",
 					printCombinList(commands), ele, reflect.TypeOf(ele), string(key.Key))
-				common.Logger.Warn(err)
+				common.Logger.Debug(err)
 			}
 		}
 	}
@@ -306,7 +306,7 @@ func (p *RedisClient) PipeExistsCommand(keyInfo []*common.Key) ([]int64, error) 
 				key := keyInfo[i]
 				err := fmt.Errorf("run PipeRawCommand with commands[%s] return element[%v] isn't type int64[%v], key[%s], continuing",
 					printCombinList(commands), ele, reflect.TypeOf(ele), string(key.Key))
-				common.Logger.Warn(err)
+				common.Logger.Debug(err)
 			}
 		}
 	}
@@ -336,7 +336,7 @@ func (p *RedisClient) PipeLenCommand(keyInfo []*common.Key) ([]int64, error) {
 				key := keyInfo[i]
 				err := fmt.Errorf("run PipeRawCommand with commands[%s] return element[%v] isn't type int64[%v], key[%s], continuing",
 					printCombinList(commands), ele, reflect.TypeOf(ele), string(key.Key))
-				common.Logger.Warn(err)
+				common.Logger.Debug(err)
 			}
 		}
 	}
@@ -366,7 +366,7 @@ func (p *RedisClient) PipeTTLCommand(keyInfo []*common.Key) ([]bool, error) {
 				key := keyInfo[i]
 				err := fmt.Errorf("run PipeRawCommand with commands[%s] return element[%v] isn't type int64[%v], key[%s], continuing",
 					printCombinList(commands), ele, reflect.TypeOf(ele), string(key.Key))
-				common.Logger.Warn(err)
+				common.Logger.Debug(err)
 			}
 		}
 	}
